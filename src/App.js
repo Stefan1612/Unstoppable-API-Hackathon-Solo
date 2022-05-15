@@ -45,6 +45,16 @@ function App() {
       console.log("etherscan api call ended up failing");
     }
   }
+
+  const [alchemyResult, setAlchemyResult] = useState("");
+  const AuthStr = "Bearer ".concat(process.env.REACT_APP_ALCHEMY_KEY);
+  async function alchemyUD() {
+    let result = await axios.get(
+      "https://unstoppabledomains.g.alchemy.com/domains/uns-devtest-126845.crypto",
+      { headers: { Authorization: AuthStr } }
+    );
+    setAlchemyResult(result);
+  }
   return (
     <Box
       className="App"
@@ -66,7 +76,12 @@ function App() {
             Domain to receive personal Data.<br></br>Entering your Domain
             instead of address will give you additional data.
           </Box>
-          <EtherscanAPI getAPIData={getAPIData} changeInput={changeInput} />
+          <EtherscanAPI
+            getAPIData={getAPIData}
+            changeInput={changeInput}
+            alchemyUD={alchemyUD}
+            alchemyResult={alchemyResult}
+          />
         </Box>
       </Container>
     </Box>

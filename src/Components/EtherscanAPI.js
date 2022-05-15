@@ -20,10 +20,14 @@ const EtherscanAPI = (props) => {
       <Button onClick={(e) => props.getAPIData()}>
         Get Etherscan API Data
       </Button>
+      <Button onClick={(e) => props.alchemyUD()}>Get alchemyUD</Button>
       <Box></Box>
       {/*   <Button onClick={(e) => getAPIDataInternal()}>
         Get Etherscan API ERC20 TX Events
       </Button> */}
+      <Box>{JSON.stringify(props.alchemyResult, null, "\t")}</Box>
+      <Box>List of all data i want to display</Box>
+      <Box>{props.alchemyResult.data.meta.domain}</Box>
     </div>
   );
 };
