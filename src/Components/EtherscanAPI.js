@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Box, Button, Input } from "@mui/material";
+import { Box, Button, Input, Typography } from "@mui/material";
 const EtherscanAPI = (props) => {
   /* ${process.env.REACT_APP_ETHERSCAN_API_KEY} */
 
@@ -20,7 +20,8 @@ const EtherscanAPI = (props) => {
         onChange={(e) => props.changeInput(e)}
         placeholder="Domain or address"
       ></Input>
-      <Button onClick={(e) => props.getAPIData()}>
+      &nbsp;
+      <Button onClick={(e) => props.getAPIData()} variant="contained">
         Get Etherscan API Data
       </Button>
       {/*  <Button onClick={(e) => props.alchemyUD()}>Get alchemyUD</Button> */}
@@ -29,64 +30,185 @@ const EtherscanAPI = (props) => {
         Get Etherscan API ERC20 TX Events
       </Button> */}
       {/* <Box>{JSON.stringify(props.alchemyResult, null, "\t")}</Box> */}
-      <Box>List of all data i want to display</Box>
-      {props.isFetched && (
-        <Box>
-          <Box>{props.alchemyResult.data.meta.domain}</Box>
-          <Box>{props.alchemyResult.data.meta.networkId}</Box>
-          <Box>{props.alchemyResult.data.meta.blockchain}</Box>
-          <Box>{props.alchemyResult.data.meta.owner}</Box>
-        </Box>
-      )}
       <Box>
-        <Box>"Normal" Transaction History </Box>
-        {/*  <Box>{JSON.stringify(props.normalTXHistory, null, "\t")}</Box> */}
-        {props.isFetchedTX && (
+        {props.isFetched && (
           <Box>
-            {/*   <Box> {JSON.stringify(props.normalTXHistory.data.result)}</Box> */}
-            {/* <Box> {props.normalTXHistory.data.result[].from}</Box> */}
-            {props.normalTXHistory.data.result.map((e, index) => {
-              return (
-                <Box>
-                  <Box>This is the {index + 1 + "th"} TX in your List</Box>
-                  <Box>
-                    From: {props.normalTXHistory.data.result[index].from}
-                  </Box>
-                  <Box>To: {props.normalTXHistory.data.result[index].to}</Box>
-                  <Box>
-                    Gas Used: {props.normalTXHistory.data.result[index].gasUsed}
-                  </Box>
-                  <Box>
-                    Gas Price:
-                    {props.normalTXHistory.data.result[index].gasPrice}
-                  </Box>
-                  <Box>
-                    Hash of TX: {props.normalTXHistory.data.result[index].hash}
-                  </Box>
-                  <Box>
-                    Value send: {props.normalTXHistory.data.result[index].value}
-                  </Box>
-                  <Box>
-                    Block-Number:
-                    {props.normalTXHistory.data.result[index].blockNumber}
-                  </Box>
-                  <Box>
-                    Contract address:
-                    {props.normalTXHistory.data.result[index].contractAddress}
-                  </Box>
-                  <Box>
-                    Input: {props.normalTXHistory.data.result[index].input}
-                  </Box>
-                </Box>
-              );
-            })}
+            <Box variant={"h2"} component={"h3"}>
+              List of all data provided with Alchemy and Unstoppable Domain{" "}
+            </Box>
+            <Box
+              style={{
+                border: "solid",
+                margin: "10px",
+                padding: "10px",
+                paddingLeft: "30px",
+                borderWidth: "1px",
+
+                textAlign: "left",
+              }}
+            >
+              <Box>
+                Your Domain name =&gt; {props.alchemyResult.data.meta.domain}
+              </Box>
+              <Box>
+                Blockchain Domain minted on =&gt;{" "}
+                {props.alchemyResult.data.meta.blockchain}
+              </Box>
+              <Box>
+                Network Domain minted on =&gt;{" "}
+                {props.alchemyResult.data.meta.networkId}
+              </Box>
+
+              <Box>
+                Domain owner =&gt; {props.alchemyResult.data.meta.owner}
+              </Box>
+            </Box>
           </Box>
         )}
       </Box>
       <Box>
-        <Box>"Internal" Transaction History </Box>
+        {/*  <Box>{JSON.stringify(props.normalTXHistory, null, "\t")}</Box> */}
         {props.isFetchedTX && (
-          <Box> {JSON.stringify(props.internalTXHistory.data.result)}</Box>
+          <Box>
+            <Box variant={"h2"} component={"h3"}>
+              "Normal" Transaction History{" "}
+            </Box>
+            <Box
+              style={{
+                border: "solid",
+                margin: "10px",
+                padding: "10px",
+                borderWidth: "1px",
+              }}
+            >
+              {/*   <Box> {JSON.stringify(props.normalTXHistory.data.result)}</Box> */}
+              {/* <Box> {props.normalTXHistory.data.result[].from}</Box> */}
+              {props.normalTXHistory.data.result.map((e, index) => {
+                return (
+                  <Box
+                    key={index}
+                    style={{
+                      border: "solid",
+                      margin: "10px",
+                      padding: "10px",
+                      borderWidth: "1px",
+                      textAlign: "left",
+                    }}
+                  >
+                    <Typography variant={"h6"} component={"h3"}>
+                      This is the {index + 1 + "th"} TX in your List
+                    </Typography>
+                    <Box>
+                      From =&gt; {props.normalTXHistory.data.result[index].from}
+                    </Box>
+                    <Box>
+                      To =&gt; {props.normalTXHistory.data.result[index].to}
+                    </Box>
+                    <Box>
+                      Gas Used =&gt;{" "}
+                      {props.normalTXHistory.data.result[index].gasUsed}
+                    </Box>
+                    <Box>
+                      Gas Price =&gt;
+                      {props.normalTXHistory.data.result[index].gasPrice}
+                    </Box>
+                    <Box>
+                      Hash of TX =&gt;{" "}
+                      {props.normalTXHistory.data.result[index].hash}
+                    </Box>
+                    <Box>
+                      Value send =&gt;{" "}
+                      {props.normalTXHistory.data.result[index].value}
+                    </Box>
+                    <Box>
+                      Block-Number =&gt;
+                      {props.normalTXHistory.data.result[index].blockNumber}
+                    </Box>
+                    <Box>
+                      Contract address =&gt;
+                      {props.normalTXHistory.data.result[index].contractAddress}
+                    </Box>
+                    {/* <Box>
+                    Input: {props.normalTXHistory.data.result[index].input}
+                  </Box> */}
+                    <br></br>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
+      </Box>
+      <Box>
+        {props.isFetchedTX && (
+          <Box>
+            <Box variant={"h2"} component={"h3"}>
+              "Internal" Transaction History{" "}
+            </Box>
+            <Box
+              style={{
+                border: "solid",
+                margin: "10px",
+                padding: "10px",
+                borderWidth: "1px",
+              }}
+            >
+              {/*   <Box> {JSON.stringify(props.internalTXHistory.data.result)}</Box> */}
+              {props.internalTXHistory.data.result.map((e, index) => {
+                return (
+                  <Box
+                    style={{
+                      border: "solid",
+                      margin: "10px",
+                      padding: "10px",
+                      borderWidth: "1px",
+                      textAlign: "left",
+                    }}
+                    key={index}
+                  >
+                    {" "}
+                    <Box>
+                      <Typography variant={"h6"} component={"h3"}>
+                        This is the {index + 1 + "th"} TX in your List
+                      </Typography>
+                    </Box>
+                    <Box>
+                      From: {props.normalTXHistory.data.result[index].from}
+                    </Box>
+                    <Box>To: {props.normalTXHistory.data.result[index].to}</Box>
+                    <Box>
+                      Gas Used:{" "}
+                      {props.normalTXHistory.data.result[index].gasUsed}
+                    </Box>
+                    <Box>
+                      Gas Price:
+                      {props.normalTXHistory.data.result[index].gasPrice}
+                    </Box>
+                    <Box>
+                      Hash of TX:{" "}
+                      {props.normalTXHistory.data.result[index].hash}
+                    </Box>
+                    <Box>
+                      Value send:{" "}
+                      {props.normalTXHistory.data.result[index].value}
+                    </Box>
+                    <Box>
+                      Block-Number:
+                      {props.normalTXHistory.data.result[index].blockNumber}
+                    </Box>
+                    <Box>
+                      Contract address:
+                      {props.normalTXHistory.data.result[index].contractAddress}
+                    </Box>
+                    {/* <Box>
+                Input: {props.normalTXHistory.data.result[index].input}
+              </Box> */}
+                    <br></br>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
         )}
       </Box>
     </div>
