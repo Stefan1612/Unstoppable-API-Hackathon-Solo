@@ -31,7 +31,7 @@ function App() {
         `https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5&startblock=0&endblock=${blockNumber}&page=1&offset=10&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
       );
       setInternalTXHistory(result);
-      console.log(result);
+
       setIsFetchedTX(true);
       console.log("address inputted");
     } catch {
@@ -98,16 +98,23 @@ function App() {
   }
   const [isFetched, setIsFetched] = useState(false);
   const [alchemyResult, setAlchemyResult] = useState("");
+  const [secondAlchemyResult, setSecondAlchemyResult] = useState("");
   const AuthStr = "Bearer ".concat(process.env.REACT_APP_ALCHEMY_KEY);
   async function alchemyUD() {
     let result = await axios.get(
       `https://unstoppabledomains.g.alchemy.com/domains/${inputValue}`,
       { headers: { Authorization: AuthStr } }
     );
-    if (result) {
+    const secondResult = await axios.get(
+      `https://unstoppabledomains.g.alchemy.com/domains/${inputValue}/transfers/latest`,
+      { headers: { Authorization: AuthStr } }
+    );
+    console.log(secondResult);
+    setSecondAlchemyResult(secondResult);
+    if (result && secondResult) {
       setIsFetched(true);
     }
-    console.log(result);
+
     setAlchemyResult(result);
     getTXHistory();
   }
@@ -148,6 +155,7 @@ function App() {
             normalTXHistory={normalTXHistory}
             isFetchedTX={isFetchedTX}
             internalTXHistory={internalTXHistory}
+            secondAlchemyResult={secondAlchemyResult}
           />
         </Box>
       </Container>

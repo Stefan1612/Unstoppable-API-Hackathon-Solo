@@ -34,7 +34,7 @@ const EtherscanAPI = (props) => {
         {props.isFetched && (
           <Box>
             <Box variant={"h2"} component={"h3"}>
-              List of all data provided with Alchemy and Unstoppable Domain{" "}
+              Records for Domain
             </Box>
             <Box
               style={{
@@ -63,6 +63,49 @@ const EtherscanAPI = (props) => {
                 Domain owner =&gt; {props.alchemyResult.data.meta.owner}
               </Box>
             </Box>
+            <Box variant={"h2"} component={"h3"}>
+              Domain Transfer Events{" "}
+            </Box>
+            {/* <Box>{JSON.stringify(props.secondAlchemyResult, null, "\t")}</Box> */}
+            {props.secondAlchemyResult.data.data.map((e, index) => {
+              return (
+                <Box
+                  key={index}
+                  style={{
+                    border: "solid",
+                    margin: "10px",
+                    padding: "10px",
+                    borderWidth: "1px",
+                    textAlign: "left",
+                  }}
+                >
+                  {" "}
+                  <Box>
+                    Domain traded =&gt;{" "}
+                    {props.secondAlchemyResult.data.data[index].domain}
+                  </Box>
+                  <Box>
+                    From =&gt; {props.secondAlchemyResult.data.data[index].from}
+                  </Box>
+                  <Box>
+                    To =&gt; {props.secondAlchemyResult.data.data[index].to}
+                  </Box>
+                  <Box>
+                    Blockchain =&gt;{" "}
+                    {props.secondAlchemyResult.data.data[index].blockchain}
+                  </Box>
+                  <Box>
+                    Network =&gt;{" "}
+                    {props.secondAlchemyResult.data.data[index].networkId}
+                  </Box>
+                  <Box>
+                    Blocknumber =&gt;{" "}
+                    {props.secondAlchemyResult.data.data[index].blockNumber}
+                  </Box>
+                </Box>
+              );
+            })}
+            )
           </Box>
         )}
       </Box>
@@ -71,7 +114,7 @@ const EtherscanAPI = (props) => {
         {props.isFetchedTX && (
           <Box>
             <Box variant={"h2"} component={"h3"}>
-              "Normal" Transaction History{" "}
+              "Normal" Transaction History of address{" "}
             </Box>
             <Box
               style={{
@@ -99,6 +142,10 @@ const EtherscanAPI = (props) => {
                       This is the {index + 1 + "th"} TX in your List
                     </Typography>
                     <Box>
+                      Value send =&gt;{" "}
+                      {props.normalTXHistory.data.result[index].value} WEI
+                    </Box>
+                    <Box>
                       From =&gt; {props.normalTXHistory.data.result[index].from}
                     </Box>
                     <Box>
@@ -116,10 +163,7 @@ const EtherscanAPI = (props) => {
                       Hash of TX =&gt;{" "}
                       {props.normalTXHistory.data.result[index].hash}
                     </Box>
-                    <Box>
-                      Value send =&gt;{" "}
-                      {props.normalTXHistory.data.result[index].value}
-                    </Box>
+
                     <Box>
                       Block-Number =&gt;
                       {props.normalTXHistory.data.result[index].blockNumber}
@@ -143,7 +187,7 @@ const EtherscanAPI = (props) => {
         {props.isFetchedTX && (
           <Box>
             <Box variant={"h2"} component={"h3"}>
-              "Internal" Transaction History{" "}
+              "Internal" Transaction History of address{" "}
             </Box>
             <Box
               style={{
@@ -173,6 +217,10 @@ const EtherscanAPI = (props) => {
                       </Typography>
                     </Box>
                     <Box>
+                      Value send:{" "}
+                      {props.normalTXHistory.data.result[index].value} WEI
+                    </Box>
+                    <Box>
                       From: {props.normalTXHistory.data.result[index].from}
                     </Box>
                     <Box>To: {props.normalTXHistory.data.result[index].to}</Box>
@@ -187,10 +235,6 @@ const EtherscanAPI = (props) => {
                     <Box>
                       Hash of TX:{" "}
                       {props.normalTXHistory.data.result[index].hash}
-                    </Box>
-                    <Box>
-                      Value send:{" "}
-                      {props.normalTXHistory.data.result[index].value}
                     </Box>
                     <Box>
                       Block-Number:
