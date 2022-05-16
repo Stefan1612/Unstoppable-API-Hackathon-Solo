@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+
 import { Box, Button, Input, Typography } from "@mui/material";
 const EtherscanAPI = (props) => {
   /* ${process.env.REACT_APP_ETHERSCAN_API_KEY} */
@@ -75,6 +75,7 @@ const EtherscanAPI = (props) => {
                     border: "solid",
                     margin: "10px",
                     padding: "10px",
+                    paddingLeft: "30px",
                     borderWidth: "1px",
                     textAlign: "left",
                   }}
@@ -105,7 +106,6 @@ const EtherscanAPI = (props) => {
                 </Box>
               );
             })}
-            )
           </Box>
         )}
       </Box>

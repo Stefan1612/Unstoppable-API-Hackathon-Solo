@@ -2,7 +2,7 @@ import "./App.css";
 import EtherscanAPI from "./Components/EtherscanAPI";
 import axios from "axios";
 import { Box, Container, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ethers } from "ethers";
 function App() {
   const [inputValue, setInputValue] = useState("");
@@ -109,7 +109,7 @@ function App() {
       `https://unstoppabledomains.g.alchemy.com/domains/${inputValue}/transfers/latest`,
       { headers: { Authorization: AuthStr } }
     );
-    console.log(secondResult);
+
     setSecondAlchemyResult(secondResult);
     if (result && secondResult) {
       setIsFetched(true);
