@@ -22,7 +22,7 @@ const EtherscanAPI = (props) => {
       ></Input>
       &nbsp;
       <Button onClick={(e) => props.getAPIData()} variant="contained">
-        Get Etherscan API Data
+        Get YOUR Data
       </Button>
       {/*  <Button onClick={(e) => props.alchemyUD()}>Get alchemyUD</Button> */}
       <Box></Box>
@@ -111,7 +111,7 @@ const EtherscanAPI = (props) => {
       </Box>
       <Box>
         {/*  <Box>{JSON.stringify(props.normalTXHistory, null, "\t")}</Box> */}
-        {props.isFetchedTX && (
+        {props.isFetchedTX && props.normalTXHistory && (
           <Box>
             <Box variant={"h2"} component={"h3"}>
               "Normal" Transaction History of address{" "}
@@ -168,10 +168,10 @@ const EtherscanAPI = (props) => {
                       Block-Number =&gt;
                       {props.normalTXHistory.data.result[index].blockNumber}
                     </Box>
-                    <Box>
+                    {/*    <Box>
                       Contract address =&gt;
                       {props.normalTXHistory.data.result[index].contractAddress}
-                    </Box>
+                    </Box> */}
                     {/* <Box>
                     Input: {props.normalTXHistory.data.result[index].input}
                   </Box> */}
@@ -179,12 +179,15 @@ const EtherscanAPI = (props) => {
                   </Box>
                 );
               })}
+              <Button variant={"contained"} onClick={(e) => props.addNum(e)}>
+                Load More
+              </Button>
             </Box>
           </Box>
         )}
       </Box>
       <Box>
-        {props.isFetchedTX && (
+        {props.isFetchedTX && props.internalTXHistory && (
           <Box>
             <Box variant={"h2"} component={"h3"}>
               "Internal" Transaction History of address{" "}
@@ -240,10 +243,10 @@ const EtherscanAPI = (props) => {
                       Block-Number:
                       {props.normalTXHistory.data.result[index].blockNumber}
                     </Box>
-                    <Box>
+                    {/* <Box>
                       Contract address:
                       {props.normalTXHistory.data.result[index].contractAddress}
-                    </Box>
+                    </Box> */}
                     {/* <Box>
                 Input: {props.normalTXHistory.data.result[index].input}
               </Box> */}
@@ -251,6 +254,9 @@ const EtherscanAPI = (props) => {
                   </Box>
                 );
               })}
+              <Button variant={"contained"} onClick={(e) => props.addNum(e)}>
+                Load More
+              </Button>
             </Box>
           </Box>
         )}
