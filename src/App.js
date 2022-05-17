@@ -9,6 +9,13 @@ function App() {
   const [normalTXHistory, setNormalTXHistory] = useState("");
   const [internalTXHistory, setInternalTXHistory] = useState("");
   const [isFetchedTX, setIsFetchedTX] = useState(false);
+  const [num, setNum] = useState(0);
+
+  function addNum() {
+    setNum((previousNum) => previousNum + 5);
+    console.log(num);
+    getTXHistory();
+  }
   function changeInput(e) {
     setInputValue(e.target.value);
   }
@@ -23,12 +30,16 @@ function App() {
 
       // ${inputValue}
       let result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlist&address=0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5&startblock=0&endblock=${blockNumber}&page=1&offset=5&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+        `https://api.etherscan.io/api?module=account&action=txlist&address=${inputValue}&startblock=0&endblock=${blockNumber}&page=1&offset=${
+          5 + num
+        }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
       );
       setNormalTXHistory(result);
 
       result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5&startblock=0&endblock=${blockNumber}&page=1&offset=10&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+        `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${inputValue}&startblock=0&endblock=${blockNumber}&page=1&offset=${
+          5 + num
+        }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
       );
       setInternalTXHistory(result);
 
@@ -41,7 +52,8 @@ function App() {
   async function getAndChangeInputIntoAddress() {
     const regex = "0x";
     // if user inputs address
-
+    setNormalTXHistory("");
+    setInternalTXHistory("");
     if (
       inputValue &&
       inputValue.length === 42 &&
@@ -124,6 +136,7 @@ function App() {
       style={{
         minHeight: "100vh",
         minWidth: "100vw",
+        /*  backgroundColor: "#c7aa93", */
       }}
     >
       <Container style={{ paddingTop: "10vh" }}>
@@ -135,9 +148,9 @@ function App() {
           }}
         >
           <Box variant={"h1"} component={"h2"}>
-            Hello, this app allows you to enter your address OR Unstoppable
-            Domain to receive Data about your Domain and/or your Transaction
-            History (Normal and Internal).
+            Hello, this app allows you to enter your address (Mainnet) OR
+            Unstoppable Domain to receive Data about your Domain and/or your
+            Transaction History (Normal and Internal).
           </Box>
           <Box>
             <Typography variant={"body2"} component={"p"}>
@@ -156,6 +169,7 @@ function App() {
             isFetchedTX={isFetchedTX}
             internalTXHistory={internalTXHistory}
             secondAlchemyResult={secondAlchemyResult}
+            addNum={addNum}
           />
         </Box>
       </Container>
