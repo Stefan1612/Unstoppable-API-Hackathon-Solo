@@ -2,7 +2,7 @@ import "./App.css";
 import EtherscanAPI from "./Components/EtherscanAPI";
 import axios from "axios";
 import { Box, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 function App() {
   const [inputValue, setInputValue] = useState("");
@@ -10,6 +10,7 @@ function App() {
   const [internalTXHistory, setInternalTXHistory] = useState("");
   const [isFetchedTX, setIsFetchedTX] = useState(false);
   const [num, setNum] = useState(0);
+  const [address, setAddress] = useState("");
 
   function addNum() {
     setNum((previousNum) => previousNum + 5);
@@ -22,32 +23,55 @@ function App() {
   // MY ADDRESS 0x4ad3710fbbf9d1f2cd56031509114e2355e54468
   // RANDOM TEST ADDRESS 0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5
   async function getTXHistory() {
-    try {
-      const provider = new ethers.providers.JsonRpcProvider(
-        `https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
-      );
-      const blockNumber = await provider.getBlockNumber();
+    if (address !== "") {
+      try {
+        const provider = new ethers.providers.JsonRpcProvider(
+          `https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
+        );
+        const blockNumber = await provider.getBlockNumber();
 
-      // ${inputValue}
-      let result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlist&address=${inputValue}&startblock=0&endblock=${blockNumber}&page=1&offset=${
-          5 + num
-        }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-      );
-      setNormalTXHistory(result);
+        // ${inputValue}#
+        console.log(address);
+        let result = await axios.get(
+          `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=${blockNumber}&page=1&offset=${
+            5 + num
+          }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+        );
+        setNormalTXHistory(result);
+        console.log(result);
+        let secondresult = await axios.get(
+          `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=${blockNumber}&page=1&offset=${
+            5 + num
+          }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+        );
+        setInternalTXHistory(secondresult);
+        if (secondresult || result !== undefined) {
+          setIsFetchedTX(true);
+        }
 
-      result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${inputValue}&startblock=0&endblock=${blockNumber}&page=1&offset=${
-          5 + num
-        }&sort=desc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-      );
-      setInternalTXHistory(result);
-
-      setIsFetchedTX(true);
-      console.log("address inputted");
-    } catch {
-      console.log("etherscan api call ended up failing");
+        console.log("address inputted");
+      } catch {
+        console.log("etherscan api call ended up failing");
+      }
     }
+  }
+  useEffect(() => {
+    console.log("useffect activated");
+    if (appInitiated) {
+      getTXHistory();
+    }
+  }, [address]);
+  const [isFetched, setIsFetched] = useState(false);
+  const [alchemyResult, setAlchemyResult] = useState("");
+  const [secondAlchemyResult, setSecondAlchemyResult] = useState("");
+  const [appInitiated, setAppInitiated] = useState(false);
+  async function getAPIData() {
+    setNormalTXHistory("");
+    setInternalTXHistory("");
+    setAlchemyResult("");
+    setSecondAlchemyResult("");
+    setAppInitiated(true);
+    getAndChangeInputIntoAddress();
   }
   async function getAndChangeInputIntoAddress() {
     const regex = "0x";
@@ -59,58 +83,21 @@ function App() {
       inputValue.length === 42 &&
       inputValue.substring(0, 2) === regex
     ) {
-      getTXHistory();
-      /*   try {
-        const provider = new ethers.providers.JsonRpcProvider(
-          `https://eth-mainnet.alchemyapi.io/v2/${process.env.REACT_APP_ALCHEMY_KEY}`
-        );
-        const blockNumber = await provider.getBlockNumber();
-
-        // ${inputValue}
-        let result = await axios.get(
-          `https://api.etherscan.io/api?module=account&action=txlist&address=0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5&startblock=0&endblock=${blockNumber}&page=1&offset=5&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-        );
-        setNormalTXHistory(result);
-
-        result = await axios.get(
-          `https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x23aD6CdC593C4ebF1f124D4aae2422A5848c29c5&startblock=0&endblock=${blockNumber}&page=1&offset=10&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-        );
-        setInternalTXHistory(result);
-        console.log(result);
-        setIsFetchedTX(true);
-        console.log("address inputted");
-      } catch {
-        console.log("etherscan api call ended up failing");
-      } */
+      setAddress(inputValue);
     }
-    // if input was Unstoppable Domain
-    // call alchemy's unstoppable API
+    // no input
     else if (inputValue === "" || inputValue === undefined) {
       console.log("no input value");
       return;
-    } else {
+    }
+    // if input was Unstoppable Domain
+    // call alchemy's unstoppable API
+    else {
       console.log("domain inputted");
       alchemyUD();
     }
   }
-  async function getAPIData() {
-    getAndChangeInputIntoAddress();
-    /*   try {
-      let result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=14775340&page=1&offset=5&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-      );
-      console.log(result);
-      result = await axios.get(
-        `https://api.etherscan.io/api?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=14775340&page=1&offset=10&sort=asc&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
-      );
-      console.log(result);
-    } catch {
-      console.log("etherscan api call ended up failing");
-    } */
-  }
-  const [isFetched, setIsFetched] = useState(false);
-  const [alchemyResult, setAlchemyResult] = useState("");
-  const [secondAlchemyResult, setSecondAlchemyResult] = useState("");
+
   const AuthStr = "Bearer ".concat(process.env.REACT_APP_ALCHEMY_KEY);
   async function alchemyUD() {
     let result = await axios.get(
@@ -123,12 +110,15 @@ function App() {
     );
 
     setSecondAlchemyResult(secondResult);
-    if (result && secondResult) {
+    if (result !== undefined && secondResult !== undefined) {
       setIsFetched(true);
     }
 
     setAlchemyResult(result);
-    getTXHistory();
+    /* console.log(alchemyResult.data.meta.owner); */
+    if (result.data.meta.owner) {
+      setAddress(result.data.meta.owner);
+    }
   }
   return (
     <Box
