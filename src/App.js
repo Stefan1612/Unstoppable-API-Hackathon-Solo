@@ -59,7 +59,7 @@ function App() {
     console.log("useffect activated");
     if (appInitiated) {
       getTXHistory();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
   const [isFetched, setIsFetched] = useState(false);
   const [alchemyResult, setAlchemyResult] = useState("");
@@ -110,7 +110,7 @@ function App() {
     );
 
     setSecondAlchemyResult(secondResult);
-    if (result !== undefined && secondResult !== undefined) {
+    if (result && secondResult) {
       setIsFetched(true);
     }
 
